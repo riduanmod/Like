@@ -429,25 +429,16 @@ def handle_like_request():
     status_code = 1 if likes_given > 0 else 2
 
     # 6. Response Construction
-    response = {
-        f"{API_PREFIX}_Developer": APP_DEV,
-        "AI_Engine": AI_MODEL,
-        "TelegramBot": "https://t.me/RiduanFFBot",
-        "TelegramChannel": "https://t.me/RiduanOfficialBD",
-        "PlayerNickname": nickname,
-        "UID": int(target_uid),
-        "LikesGivenByAPI": likes_given,
-        "LikesafterCommand": likes_after,
-        "LikesbeforeCommand": likes_before,
-        "status": status_code,
-        "Region": server_name,
-        "Note": f"Processed with {len(uids_to_use)} accounts. Ver: {RELEASE_VERSION}"
+    response_data = {
+        "LikesGivenByAPI": likes_increment,
+        "LikesafterCommand": after_like_count,
+        "LikesbeforeCommand": before_like_count,
+        "PlayerNickname": player_nickname_from_profile,
+        "UID": actual_player_uid_from_profile,
+        "status": request_status,
+        "Note": f"Used visit token for profile check and {'random' if use_random else 'rotating'} batch of {len(tokens_for_like_sending)} tokens for like sending."
     }
-    
-    color = UI.GREEN if likes_given > 0 else UI.RED
-    print(f"{color}[RES] Sent {likes_given} Likes to {nickname}{UI.RESET}\n")
-
-    return jsonify(response)
+    return jsonify(response_data)
 
 @app.route('/reload', methods=['GET'])
 def reload_acc():
